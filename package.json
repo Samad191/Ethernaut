@@ -8,7 +8,10 @@
     "ethers": "^5.6.9",
     "hardhat": "^2.10.1"
   },
-   "scripts": {
+  "scripts": {
     "test": "mocha --timeout 10000"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.1"
   }
 }

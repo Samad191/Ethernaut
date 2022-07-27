@@ -1,32 +1,35 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-let contract;
+let greeterContract;
+let callGreeterContract;
 const provider = ethers.getDefaultProvider()
+
 
 it('deploy', async () => {
 
   const Contract = await ethers.getContractFactory('Greeter');
-  contract = await Contract.deploy();
-  await contract.deployed();
-  console.log('Address', contract.address);
+  greeterContract = await Contract.deploy();
+  await greeterContract.deployed();
+  console.log('Address', greeterContract.address);
+
+  const ContractCallGreeter = await ethers.getContractFactory('CallGreeter');
+  callGreeterContract = await ContractCallGreeter.deploy();
+  await callGreeterContract.deployed();
+
+  console.log('Call greeter contract', callGreeterContract.address);
 
 })
 
-// it('owner', async () => {
-//   const owner = await contract.owner()
-//   console.log('Owner', owner);
-// })
 
-it('change-owner',  async () => {
+it('tx-origin', async () => {
+  const owner = await greeterContract.owner();
+  console.log('Owner ===>>', owner);
+
   const [addr1, addr2] = await ethers.getSigners();
-  // console.log('Two addresses', addr1.address, addr2.address);
+  console.log('address',addr2.address)
+  await callGreeterContract.callGreeter(greeterContract.address, addr2.address);
 
-  const bal = await provider.getBalance(addr1.address);
-  // console.log('bal',bal)
-
-  await contract.Fal1out({ value: ethers.utils.parseEther('0.000000001') })
-
-  const owner = await contract.owner()
-  console.log('Owner', owner);
+  const newOwner = await greeterContract.owner();
+  console.log('Owner ===>>', newOwner);
 })
