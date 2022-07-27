@@ -1,19 +1,32 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Greeter", function () {
-  it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+let contract;
+const provider = ethers.getDefaultProvider()
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+it('deploy', async () => {
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+  const Contract = await ethers.getContractFactory('Greeter');
+  contract = await Contract.deploy();
+  await contract.deployed();
+  console.log('Address', contract.address);
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
+})
 
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
-  });
-});
+// it('owner', async () => {
+//   const owner = await contract.owner()
+//   console.log('Owner', owner);
+// })
+
+it('change-owner',  async () => {
+  const [addr1, addr2] = await ethers.getSigners();
+  // console.log('Two addresses', addr1.address, addr2.address);
+
+  const bal = await provider.getBalance(addr1.address);
+  // console.log('bal',bal)
+
+  await contract.Fal1out({ value: ethers.utils.parseEther('0.000000001') })
+
+  const owner = await contract.owner()
+  console.log('Owner', owner);
+})
