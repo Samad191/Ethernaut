@@ -12,6 +12,7 @@
     "test": "mocha --timeout 10000"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.7.1"
+    "@openzeppelin/contracts": "^4.7.1",
+    "web3": "^1.7.4"
   }
 }

